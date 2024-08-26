@@ -1,18 +1,33 @@
+import de.chojo.PublishData
+
 plugins {
     java
     `maven-publish`
     `java-library`
+    id("de.chojo.publishdata") version "1.4.0"
 }
 
-group = "de.chojo.foundation"
+group = "dev.chojo.foundation"
 version = "1.0.0"
 
+dependencies {
+    api(project(":core"))
+    api(project(":configuration"))
+    api(project(":system"))
+}
 
 
 allprojects {
     apply<JavaPlugin>()
     apply<JavaLibraryPlugin>()
     apply<MavenPublishPlugin>()
+    apply<PublishData>()
+
+    java{
+        toolchain{
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -22,10 +37,36 @@ allprojects {
         testImplementation(platform("org.junit:junit-bom:5.11.0"))
         testImplementation("org.junit.jupiter:junit-jupiter")
     }
-}
 
-tasks {
-    test {
-        useJUnitPlatform()
+    publishData {
+        useEldoNexusRepos()
+    }
+
+    publishing {
+        publications.create<MavenPublication>("maven") {
+            // configure the publication as defined previously.
+            publishData.configurePublication(this)
+        }
+
+        repositories {
+            maven {
+                authentication {
+                    credentials(PasswordCredentials::class) {
+                        username = System.getenv("NEXUS_USERNAME")
+                        password = System.getenv("NEXUS_PASSWORD")
+                    }
+                }
+
+                name = "EldoNexus"
+                setUrl(publishData.getRepository())
+            }
+        }
+    }
+    tasks {
+        test {
+            useJUnitPlatform()
+        }
     }
 }
+
+
