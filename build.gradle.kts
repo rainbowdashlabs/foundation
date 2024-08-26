@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.chojo.foundation"
-version = "1.0.0"
+version = "1.0.1"
 
 dependencies {
     api(project(":core"))
@@ -40,6 +40,7 @@ allprojects {
 
     publishData {
         useEldoNexusRepos()
+        publishComponent("java")
     }
 
     publishing {
