@@ -8,7 +8,7 @@ dependencyResolutionManagement {
             version("jackson", "2.17.2")
             library("jackson-core", "com.fasterxml.jackson.core", "jackson-databind").versionRef("jackson")
             library("slf4j", "org.slf4j:slf4j-api:2.0.16")
-            library("jetbrains-annotations", "org.jetbrains:annotations:24.1.0")
+            library("jetbrains-annotations", "org.jetbrains:annotations:26.0.1")
         }
     }
 }
